@@ -1,3 +1,4 @@
 # Medical-Store
 Small Version Of E-Commerce Website .
-Made in Django and JavaScript.
+Made in python and JavaScript.
+Framework used:Django,Jquery,Bootstrap.
