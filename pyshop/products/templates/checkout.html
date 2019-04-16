@@ -1,0 +1,55 @@
+{% extends 'index.html'%}
+{% block new%}
+
+<head>
+  <style type="text/css">
+    body{
+      align-content: center;
+      text-align: center;
+      
+    }
+  </style>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+
+    </script>
+</head>
+<body>
+  <h3 style="padding:auto;color:blue;background-color: black; border-radius: 30px;" class="mx-5">Cart Items</h3>
+<ul class="list-group" id="items">
+    
+</ul>
+
+<script>
+    if(localStorage.getItem('cart')==null){
+    var cart={};
+    }
+    else{
+    cart=JSON.parse(localStorage.getItem('cart'));
+    }
+    console.log(cart);
+    var total=0
+    var i=1;
+    for(items in cart){
+
+   let name=items.slice(2,);
+   let qty=cart[items];
+   total=total+qty;
+   
+   mystr=`<li class="list-group-item d-flex justify-content-between align-items-center mx-5">
+    ${i}.${name}
+    <span class="badge badge-primary badge-pill">${qty}</span>
+  </li>`;
+  $('#items').append(mystr);
+    i=i+1;
+    }
+   mystr=`<li class="list-group-item d-flex justify-content-between align-items-center mx-5" style="color:green;">
+    Total Items:
+    <span class="badge badge-primary badge-pill">${total}</span>
+  </li>`;
+$('#items').append(mystr);
+
+</script>
+  <br><br>
+<button class="btn btn-primary" style="alignment-baseline: center";>Buy Now</button>
+{% endblock %}
+</body>

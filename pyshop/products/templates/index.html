@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% block content %}
+<title>mymedicle</title>
+<head>
+    <style>
+    body{
+
+        background: url("https://i2.wp.com/www.liveyourlifemore.com/wp-content/uploads/2017/08/WHAT-ARE-GENERIC-MEDICINES-AND-WHY-ARE-THEY-CHEAPER.png?resize=1038%2C576");
+        background-size:cover;
+        background-repeat: no-repeat;
+        width: 100%;
+        height: 100%;
+        opacity:1;
+        }
+      div.row {
+  opacity: 0.9;
+  filter: alpha(opacity=50);
+}
+
+div.card:hover {
+  opacity: 0.8;
+  filter: alpha(opacity=100);
+}
+
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js">
+
+    </script>
+</head>
+
+    <body>
+<div class="background">
+<div class="row">
+    {% for pro in products %}
+
+    <div class="col">
+        <div class="card" style="width: 18rem;">
+            <img src="{{ pro.image_url}}" class="card-img-top" alt="..." style="height:16rem;">
+            <div class="card-body">
+                <h5 class="card-title" id="namepr{{pro.name}}">{{ pro.name }}</h5>
+                <p class="card-text">
+                    Rs.{{ pro.price }}
+                ||
+                    stock:{{pro.stock}}
+                </p>
+                <button id="pr{{pro.name}}" class="btn btn-primary cart">Add to cart</button>
+            </div>
+
+        </div>
+        <br>
+        <br>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+    </div>
+{% block js%}
+<script >
+    if(localStorage.getItem('cart')==null){
+    var cart={};
+    }
+    else{
+    cart=JSON.parse(localStorage.getItem('cart'));
+    document.getElementById('cart').innerHTML=Object.keys(cart).length;
+    }
+
+    $('.cart').click(function(){
+    var idstr=this.id.toString();
+    if(cart[idstr]!=undefined){
+    //qty=cart[idstr][0]+1;
+    cart[idstr]=cart[idstr]+1;
+    updatePopOver(cart);
+    }
+    else{
+    qty=1;
+    cart[idstr]=1;
+    updatePopOver(cart);
+    }
+    console.log(cart)
+    localStorage.setItem('cart',JSON.stringify(cart));
+
+      document.getElementById('cart').innerHTML=Object.keys(cart).length;
+    });
+    $('#popcart').popover();
+updatePopOver(cart);
+function updatePopOver(cart){
+    var popstr="";
+    popstr=popstr+" <h5> Cart items Are:</h5><div class='mx-2 my-2 '> ";
+    var i=1;
+    for (var items in cart){
+       popstr=popstr+ "<b>" + i + "</b>. ";
+       popstr=popstr+document.getElementById('name'+items).innerHTML.slice(0,19) + " ...Qty: "+cart[items]+"<br/>";
+       i=i+1;
+    }
+
+   popstr=popstr+" </div> <a href='{% url 'new' %}'><p class='btn btn-primary' id='checkout'>Checkout</p></a> <p class='btn btn-primary mx-2' id='clearcart' onclick='clearcart()' >Clearcart</p>   ";
+    console.log(popstr);
+        
+
+    
+    document.getElementById('popcart').setAttribute('data-content',popstr);
+    $('#popcart').popover('show');
+
+
+}
+function clearcart(){
+    cart=JSON.parse(localStorage.getItem('cart'));
+    localStorage.clear();
+    cart={};
+    updatePopOver(cart);
+}
+
+</script>
+    {% endblock %}
+</body>
